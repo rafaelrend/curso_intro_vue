@@ -1,0 +1,136 @@
+<body>
+  <div id="app">
+    <input type="text" v-model="nome" :style="estilo" v-on:change="alterei" >
+    <textarea v-model="nome2">
+
+    </textarea>
+     {{nome2}}   {{nome}}  {{msg}}
+    <div id="div_ola" v-if="mostrar_div" v-html="msg" >
+      Olá Mundo.
+      </div>
+      
+      <button type="button" v-on:click="mostrar" v-if="!mostrar_div"  />Mostrar</button>
+      <button type="button" v-on:click="esconder" v-if="mostrar_div" />Esconder</button>
+
+
+      <ul>
+        <li v-for="(item, index) in lista" :key="index">
+           {{item.nome}}
+           <input type="text" v-model="item.nome" />
+        </li>
+
+
+      </ul>
+      <select v-model="nome_selecionado">
+        <option v-for="(item, index) in lista" :key="index" :value="item.nome" >{{item.nome}}</option>
+
+      </select>
+
+       O nome selecionado foi: {{nome_selecionado}} - e alteramos {{qtde}} vezes.
+
+
+      <br><br>
+      <h4>CEP</h4>
+      <input type="text" v-model="cep" v-on:change="consulta_cep" maxlength="8">
+      <div v-if="cep_data != null ">
+          Logradouro: {{cep_data.logradouro}}
+          <table>
+            <tr v-for="(item,index) in cep_keys">
+                <td>
+                   {{item}}
+                </td>
+                <td>
+                  {{ cep_data[item] }}
+               </td>
+
+            </tr>
+          </table>
+      </div>
+
+  </div>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+var app = new Vue({el: "#app",
+       data: {
+         mostrar_div: true,
+         nome: "Rafael",
+         nome2: "Televisão",
+         lista: [
+            { nome: "Nome 01" },
+            { nome: "Nome 02" },
+            { nome: "Nome 03" },
+
+         ],
+
+         qtde: 0,
+         cep: "",
+         cep_data: null,
+         cep_keys : [],
+         nome_selecionado: "",
+         estilo: "background-color:red",
+         msg: "Olá Mundo - testes testestes stests .",
+       },
+       methods:{
+                      
+                mostrar(){
+                       this.mostrar_div = true;
+                },
+                esconder(){
+                       this.mostrar_div = false;
+                },
+                alterei(event){
+                 // alert("eu alterei o valor");
+                    console.log("valor? ", event.target.value );
+                    console.log("evento? ", event ); 
+
+                },
+                consulta_cep(){
+                   var self = this;
+
+
+                  axios.get('https://viacep.com.br/ws/'+this.cep+'/json/')
+                  .then(function (response) {
+                    // handle success 
+                           console.log(response);
+                           self.cep_data = response.data;
+
+                           self.cep_keys = Object.keys( self.cep_data  );
+                   //
+                  })
+                  .catch(function (error) {
+                    // handle error
+                   // console.log(error);
+                  })
+                  .finally(function () {
+                    // always executed
+                  });
+                }
+
+
+
+       },
+       watch:{
+
+        nome_selecionado: function(){
+              this.qtde++;
+        }
+       },
+  
+       
+       created(){
+         console.log(" eu criei o componente ");
+       },
+
+       mounted(){
+         console.log(" eu montei o componente ");
+       }
+
+
+
+});
+
+</script>

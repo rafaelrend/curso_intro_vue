@@ -1,0 +1,94 @@
+<body>
+  <div id="app">
+    <input type="text" v-model="nome" :style="estilo" v-on:change="alterei" >
+    <textarea v-model="nome2">
+
+    </textarea>
+     {{nome2}}   {{nome}}  {{msg}}
+    <div id="div_ola" v-if="mostrar_div" v-html="msg" >
+      Olá Mundo.
+      </div>
+      
+      <button type="button" v-on:click="mostrar" v-if="!mostrar_div"  />Mostrar</button>
+      <button type="button" v-on:click="esconder" v-if="mostrar_div" />Esconder</button>
+
+
+      <ul>
+        <li v-for="(item, index) in lista" :key="index">
+           {{item.nome}}
+           <input type="text" v-model="item.nome" />
+        </li>
+
+
+      </ul>
+      <select v-model="nome_selecionado">
+        <option v-for="(item, index) in lista" :key="index" :value="item.nome" >{{item.nome}}</option>
+
+      </select>
+
+       O nome selecionado foi: {{nome_selecionado}} - e alteramos {{qtde}} vezes.
+
+
+      <br><br>
+
+  </div>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script>
+var app = new Vue({el: "#app",
+       data: {
+         mostrar_div: true,
+         nome: "Rafael",
+         nome2: "Televisão",
+         lista: [
+            { nome: "Nome 01" },
+            { nome: "Nome 02" },
+            { nome: "Nome 03" },
+
+         ],
+
+            qtde: 0,
+         nome_selecionado: "",
+         estilo: "background-color:red",
+         msg: "Olá Mundo - testes testestes stests .",
+       },
+       methods:{
+                      
+                mostrar(){
+                       this.mostrar_div = true;
+                },
+                esconder(){
+                       this.mostrar_div = false;
+                },
+                alterei(event){
+                 // alert("eu alterei o valor");
+                    console.log("valor? ", event.target.value );
+                    console.log("evento? ", event ); 
+
+                }
+
+
+       },
+       watch:{
+
+        nome_selecionado: function(){
+              this.qtde++;
+        }
+       },
+  
+       
+       created(){
+         console.log(" eu criei o componente ");
+       },
+
+       mounted(){
+         console.log(" eu montei o componente ");
+       }
+
+
+
+});
+
+</script>
